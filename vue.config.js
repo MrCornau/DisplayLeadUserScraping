@@ -1,3 +1,4 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/displayscrape/" : "/",
+  publicPath:
+    process.env.NODE_ENV === "production" ? "/DisplayLeadUserScraping/" : "/",
 };
