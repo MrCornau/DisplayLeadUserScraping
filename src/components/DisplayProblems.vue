@@ -9,6 +9,20 @@
         </div>
         <br />
         <span v-html="SplitProblems(item.content)"></span>
+        <a
+          v-if="item.link"
+          class="button"
+          v-bind:href="item.link"
+          target="_blank"
+        >
+          <div class="button-font">Check out post</div>
+
+          <span class="button-seperator"></span>
+          <img
+            class="button-icon"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAR1JREFUaEPtl8ENAjEMBO1OeEHKoBOgMq4TKON+0IlRhPLipIsTr0Mk521HO7uWnDBNfnhy/RQAoxOMBCKBTgdihDoN7G6PBKosTHKmlZ9VtcoifAJHWYjpQkw3WnlR6tstxwIU8UUGAAIHkMdG6PFjoTEEDiArT3IloTsSAgvgAIEHAEP4AAAh/ABAEL4AAAh/AGOIMQCGEHqAk8jufu8tUCy7/wTIBlRCBEDvtGz2V7r/DWrUMXonjQEwEj8mAUPx/gDG4n0BAOL9AEDifQCA4vEAYPFYgCQHEnoh/8NYgK0Xp2LD1u5X/CIrYwQQj0+g2JjHaeV3rauaOnwCGjUNtQHQYJppSyRgamfDZZFAg2mmLZGAqZ0Nl02fwAeQR4IxQfl2sQAAAABJRU5ErkJggg=="
+          />
+        </a>
       </li>
     </ul>
   </div>
@@ -50,6 +64,43 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.button {
+  text-decoration: none;
+  margin-top: 16px;
+  padding: 4px 8px 4px 8px;
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
+  background: rgba(172, 209, 244, 0.2);
+  /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); */
+  border-radius: 3px;
+  cursor: pointer;
+  width: -webkit-max-content;
+  justify-content: center;
+  color: blue;
+  height: 20px;
+}
+
+.button:hover {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-style: 1px blue;
+}
+
+.button-icon {
+  height: 24px;
+}
+
+.button-seperator {
+  content: "";
+  display: inline-block;
+  background: blue;
+
+  height: 100%;
+  width: 0.5px;
+  vertical-align: top;
+}
+
 .grid {
   column-count: 2;
   column-gap: 20;
