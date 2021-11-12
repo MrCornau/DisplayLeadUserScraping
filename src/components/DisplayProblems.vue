@@ -4,8 +4,11 @@
     <ul class="grid">
       <li v-for="item in this.Data" :key="item.name" class="item">
         <div class="heading">
-          <span class="autor">{{ item.autor + " " }} </span>
-          <span class="date">{{ item.date }}</span>
+          <div>
+            ><span class="autor">{{ item.autor + " " }} </span>
+            <span class="date">{{ item.date }}</span>
+          </div>
+          <!-- <span>{{ index }}</span> -->
         </div>
         <br />
         <span v-html="SplitProblems(item.content)"></span>
@@ -101,12 +104,6 @@ export default {
   vertical-align: top;
 }
 
-.grid {
-  column-count: 2;
-  column-gap: 20;
-  padding: 10px;
-  text-align: left;
-}
 .autor {
   font-weight: bold;
 }
@@ -115,14 +112,30 @@ export default {
   color: blue;
 }
 
+.grid {
+  column-count: 2;
+  column-gap: 20;
+  padding: 10px;
+  text-align: left;
+}
 .item {
-  display: inline-block; /* important to wrap notes not content */
+  /* display: inline-block; important to wrap notes not content */
   width: 98%;
   background-color: #ffffff;
   margin-top: 20px;
   padding: 1%;
   border-radius: 5px;
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.item:nth-child(3n + 1) {
+  order: 1;
+}
+.item:nth-child(3n + 2) {
+  order: 2;
+}
+.item:nth-child(3n) {
+  order: 3;
 }
 
 /* .item{
