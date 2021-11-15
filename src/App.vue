@@ -37,6 +37,7 @@
           v-bind:Heading="'Problem'"
           v-bind:Data="this.Data[counter].interestingcomments"
           v-bind:SaveButton="true"
+          v-bind:IsDelete="false"
         />
       </div>
     </div>
@@ -47,6 +48,7 @@
           v-bind:Heading="'Problem'"
           v-bind:Data="this.interestingComments"
           v-bind:SaveButton="false"
+          v-bind:IsDelete="true"
         />
       </div>
     </div>
@@ -79,7 +81,6 @@ export default {
     foobar.forEach(async (item) => {
       let temp = await import("./json/" + item.replace("./", ""));
       this.Data.push(temp);
-      console.log("test", this.Data);
     });
 
     try {

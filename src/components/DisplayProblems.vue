@@ -35,6 +35,14 @@
         >
           <div class="button-font">AddPost</div>
         </a>
+        <a
+          v-if="IsDelete"
+          class="button"
+          v-on:click="toggle"
+          @click="deleteComment(item)"
+        >
+          <div class="button-font">Delete</div>
+        </a>
       </li>
     </ul>
   </div>
@@ -48,8 +56,19 @@ export default {
   name: "DisplayProblems",
   props: {
     SaveButton: Boolean,
+    IsDelete: Boolean,
     Data: JSON,
     Heading: String,
+  },
+  data: function () {
+    return {
+      interestingComments: [],
+      pagecount: 0,
+      counter: 0,
+      test: true,
+      UpdatedData: this.Data,
+      json: null, // passing array data into Vue
+    };
   },
   methods: {
     async postComment(item) {
@@ -61,6 +80,11 @@ export default {
         content: item.content,
         link: item.link,
       });
+    },
+    async deleteComment(item) {
+      await axios.delete(baseurl + "/" + item.id);
+      const res = await axios.get(baseurl);
+      this.UpdatedData = res.data;
     },
     toggle(event) {
       event.target.classList.toggle("SavedClass");
