@@ -53,7 +53,7 @@
     </div>
     <div>
       <DisplayProblems
-        v-if="this.Data[counter].interestingcomments"
+        v-if="pagecount == 1 && this.Data[counter].interestingcomments"
         v-bind:Heading="'Problem'"
         v-bind:Data="this.Data[counter].interestingcomments"
         v-bind:SaveButton="true"
@@ -63,7 +63,7 @@
     </div>
 
     <DisplayProblems
-      v-if="this.interestingComments[counter2]"
+      v-if="pagecount == 0 && this.interestingComments[counter2]"
       v-bind:Heading="'Problem'"
       v-bind:Data="this.interestingComments[counter2]"
       v-bind:SaveButton="false"
