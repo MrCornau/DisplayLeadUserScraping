@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div>
+      <h1>interestingcomments</h1>
+      <ul>
+        <li v-for="item in interestingComments" :key="item.id">
+          {{ item.autor }}
+        </li>
+        <button @click="postComment">buttontest</button>
+      </ul>
+    </div>
     <div class="switch">
       <div
         v-for="(item, index) in this.Data"
@@ -28,6 +37,9 @@
 <script>
 import DisplayProblems from "./components/DisplayProblems.vue";
 
+import axios from "axios";
+const baseurl = "https://fakerestnlp.herokuapp.com/positiveComments";
+
 export default {
   name: "App",
   components: {
@@ -35,6 +47,7 @@ export default {
   },
   data: function () {
     return {
+      interestingComments: [],
       counter: 0,
       test: true,
       Data: [],
@@ -48,8 +61,21 @@ export default {
       this.Data.push(temp);
       console.log("test", this.Data);
     });
+
+    try {
+      const res = await axios.get(baseurl);
+      this.interestingComments = res.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
   methods: {
+    async postComment() {
+      await axios.post(baseurl, {
+        autor: "Jmeynn",
+        selftext: "hdjjdjdj",
+      });
+    },
     getJson() {
       const files = require.context("@/json", true, /^.*json$/);
       files.keys();
