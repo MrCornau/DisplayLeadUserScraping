@@ -12,46 +12,55 @@
         </div>
         <br />
         <span v-html="SplitProblems(item.content)"></span>
-        <a
-          v-if="item.link"
-          class="button"
-          v-bind:href="item.link"
-          target="_blank"
-        >
-          <div class="button-font">Check out post</div>
+        <div class="ButtonFlex">
+          <a
+            v-if="item.link"
+            class="button"
+            v-bind:href="item.link"
+            target="_blank"
+          >
+            <div class="button-font">Check out post</div>
 
-          <span class="button-seperator"></span>
-          <img
-            class="button-icon"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAR1JREFUaEPtl8ENAjEMBO1OeEHKoBOgMq4TKON+0IlRhPLipIsTr0Mk521HO7uWnDBNfnhy/RQAoxOMBCKBTgdihDoN7G6PBKosTHKmlZ9VtcoifAJHWYjpQkw3WnlR6tstxwIU8UUGAAIHkMdG6PFjoTEEDiArT3IloTsSAgvgAIEHAEP4AAAh/ABAEL4AAAh/AGOIMQCGEHqAk8jufu8tUCy7/wTIBlRCBEDvtGz2V7r/DWrUMXonjQEwEj8mAUPx/gDG4n0BAOL9AEDifQCA4vEAYPFYgCQHEnoh/8NYgK0Xp2LD1u5X/CIrYwQQj0+g2JjHaeV3rauaOnwCGjUNtQHQYJppSyRgamfDZZFAg2mmLZGAqZ0Nl02fwAeQR4IxQfl2sQAAAABJRU5ErkJggg=="
-          />
-        </a>
+            <span class="button-seperator"></span>
+            <img
+              class="button-icon"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAR1JREFUaEPtl8ENAjEMBO1OeEHKoBOgMq4TKON+0IlRhPLipIsTr0Mk521HO7uWnDBNfnhy/RQAoxOMBCKBTgdihDoN7G6PBKosTHKmlZ9VtcoifAJHWYjpQkw3WnlR6tstxwIU8UUGAAIHkMdG6PFjoTEEDiArT3IloTsSAgvgAIEHAEP4AAAh/ABAEL4AAAh/AGOIMQCGEHqAk8jufu8tUCy7/wTIBlRCBEDvtGz2V7r/DWrUMXonjQEwEj8mAUPx/gDG4n0BAOL9AEDifQCA4vEAYPFYgCQHEnoh/8NYgK0Xp2LD1u5X/CIrYwQQj0+g2JjHaeV3rauaOnwCGjUNtQHQYJppSyRgamfDZZFAg2mmLZGAqZ0Nl02fwAeQR4IxQfl2sQAAAABJRU5ErkJggg=="
+            />
+          </a>
+          <div class="ButtonFlex__Container">
+            <a
+              v-if="SaveButton"
+              class="button"
+              v-on:click="toggle"
+              @click="postit(item, 0)"
+            >
+              <div class="button-font">Lead User</div>
+            </a>
+            <a
+              v-if="SaveButton"
+              class="button"
+              v-on:click="toggle"
+              @click="postit(item, 1)"
+            >
+              <div class="button-font">Bad User</div>
+            </a>
 
-        <a
-          v-if="SaveButton"
-          class="button"
-          v-on:click="toggle"
-          @click="postComment(item)"
-        >
-          <div class="button-font">AddPost</div>
-        </a>
-        <a
-          v-if="IsDelete"
-          class="button"
-          v-on:click="toggle"
-          @click="deleteComment(item)"
-        >
-          <div class="button-font">Delete</div>
-        </a>
+            <a
+              v-if="IsDelete"
+              class="button"
+              v-on:click="toggle"
+              @click="deleteComment(item, this.isLead)"
+            >
+              <div class="button-font">Delete</div>
+            </a>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-const baseurl = "https://fakerestnlp.herokuapp.com/positiveComments";
-
 export default {
   name: "DisplayProblems",
   props: {
@@ -59,6 +68,8 @@ export default {
     IsDelete: Boolean,
     Data: JSON,
     Heading: String,
+    isLead: Number,
+    method: { type: Function },
   },
   data: function () {
     return {
@@ -71,20 +82,23 @@ export default {
     };
   },
   methods: {
-    async postComment(item) {
-      await axios.post(baseurl, {
-        autor: item.autor,
-        selftext: item.selftext,
-        title: item.title,
-        date: item.date,
-        content: item.content,
-        link: item.link,
-      });
+    // async postComment(item) {
+    //   await axios.post(baseurl, {
+    //     autor: item.autor,
+    //     selftext: item.selftext,
+    //     title: item.title,
+    //     date: item.date,
+    //     content: item.content,
+    //     link: item.link,
+    //   });
+    // },
+
+    postit(item, way) {
+      console.log(item, "test123");
+      this.$emit("add", item, way);
     },
-    async deleteComment(item) {
-      await axios.delete(baseurl + "/" + item.id);
-      const res = await axios.get(baseurl);
-      this.UpdatedData = res.data;
+    async deleteComment(item, way) {
+      this.$emit("delete", item, way);
     },
     toggle(event) {
       event.target.classList.toggle("SavedClass");
@@ -118,6 +132,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.ButtonFlex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ButtonFlex__Container {
+  display: flex;
+  gap: 8px;
+}
+
 .SavedClass {
   color: red !important;
 }
@@ -180,7 +204,7 @@ export default {
   margin-top: 20px;
   padding: 1%;
   border-radius: 5px;
-  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  box-shadow: rgba(17, 12, 46, 0.05) 0px 48px 100px 0px;
 }
 
 .item:nth-child(3n + 1) {
