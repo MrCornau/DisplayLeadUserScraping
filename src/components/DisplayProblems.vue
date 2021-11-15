@@ -26,19 +26,46 @@
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAR1JREFUaEPtl8ENAjEMBO1OeEHKoBOgMq4TKON+0IlRhPLipIsTr0Mk521HO7uWnDBNfnhy/RQAoxOMBCKBTgdihDoN7G6PBKosTHKmlZ9VtcoifAJHWYjpQkw3WnlR6tstxwIU8UUGAAIHkMdG6PFjoTEEDiArT3IloTsSAgvgAIEHAEP4AAAh/ABAEL4AAAh/AGOIMQCGEHqAk8jufu8tUCy7/wTIBlRCBEDvtGz2V7r/DWrUMXonjQEwEj8mAUPx/gDG4n0BAOL9AEDifQCA4vEAYPFYgCQHEnoh/8NYgK0Xp2LD1u5X/CIrYwQQj0+g2JjHaeV3rauaOnwCGjUNtQHQYJppSyRgamfDZZFAg2mmLZGAqZ0Nl02fwAeQR4IxQfl2sQAAAABJRU5ErkJggg=="
           />
         </a>
+
+        <a
+          v-if="SaveButton"
+          class="button"
+          v-on:click="toggle"
+          @click="postComment(item)"
+        >
+          <div class="button-font">AddPost</div>
+        </a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+const baseurl = "https://fakerestnlp.herokuapp.com/positiveComments";
+
 export default {
   name: "DisplayProblems",
   props: {
+    SaveButton: Boolean,
     Data: JSON,
     Heading: String,
   },
   methods: {
+    async postComment(item) {
+      await axios.post(baseurl, {
+        autor: item.autor,
+        selftext: item.selftext,
+        title: item.title,
+        date: item.date,
+        content: item.content,
+        link: item.link,
+      });
+    },
+    toggle(event) {
+      event.target.classList.toggle("SavedClass");
+      console.log("test");
+    },
     SplitProblems(string) {
       let checked = string.split(/\s+/);
 
@@ -67,6 +94,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.SavedClass {
+  color: red !important;
+}
+
 .button {
   text-decoration: none;
   margin-top: 16px;

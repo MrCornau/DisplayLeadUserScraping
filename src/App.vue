@@ -1,35 +1,54 @@
 <template>
   <div>
-    <div>
-      <h1>interestingcomments</h1>
-      <ul>
-        <li v-for="item in interestingComments" :key="item.id">
-          {{ item.autor }}
-        </li>
-        <button @click="postComment">buttontest</button>
-      </ul>
-    </div>
     <div class="switch">
-      <div
-        v-for="(item, index) in this.Data"
-        :key="item.name"
-        class="list-item"
-      >
+      <div class="list-item">
         <a
-          v-on:click="counter = index"
-          v-bind:class="[{ listItemSelected: counter === index }]"
+          v-on:click="pagecount = 0"
+          v-bind:class="[{ listItemSelected: pagecount === 0 }]"
+          ><h1>Selected Comments</h1></a
         >
-          <h1>{{ this.Data[index].name }}</h1>
-        </a>
+      </div>
+      <div class="list-item">
+        <a
+          v-on:click="pagecount = 1"
+          v-bind:class="[{ listItemSelected: pagecount === 1 }]"
+          ><h1>RawData</h1></a
+        >
       </div>
     </div>
-
+    <div v-if="pagecount == 1">
+      <div class="switch">
+        <div
+          v-for="(item, index) in this.Data"
+          :key="item.name"
+          class="list-item"
+        >
+          <a
+            v-on:click="counter = index"
+            v-bind:class="[{ listItemSelected: counter === index }]"
+          >
+            <h1>{{ this.Data[index].name }}</h1>
+          </a>
+        </div>
+      </div>
+      <div>
+        <DisplayProblems
+          v-if="this.Data[counter].interestingcomments"
+          v-bind:Heading="'Problem'"
+          v-bind:Data="this.Data[counter].interestingcomments"
+          v-bind:SaveButton="true"
+        />
+      </div>
+    </div>
     <div>
-      <DisplayProblems
-        v-if="this.Data[counter].interestingcomments"
-        v-bind:Heading="'Problem'"
-        v-bind:Data="this.Data[counter].interestingcomments"
-      />
+      <div v-if="pagecount == 0">
+        <DisplayProblems
+          v-if="this.interestingComments"
+          v-bind:Heading="'Problem'"
+          v-bind:Data="this.interestingComments"
+          v-bind:SaveButton="false"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +67,7 @@ export default {
   data: function () {
     return {
       interestingComments: [],
+      pagecount: 0,
       counter: 0,
       test: true,
       Data: [],
