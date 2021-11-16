@@ -1,6 +1,12 @@
 <template>
   <div class="hello">
-    {{ this.Data.length }}
+    <h2 class="itemcount">{{ this.Data.length }} Items</h2>
+
+    <DisplayParams
+      v-if="this.Procedure"
+      v-bind:Procedure="this.Procedure"
+      v-bind:SearchParam="this.SearchParam"
+    ></DisplayParams>
     <ul class="grid">
       <li v-for="item in this.Data" :key="item.name" class="item">
         <div class="heading">
@@ -8,6 +14,7 @@
             ><span class="autor">{{ item.autor + " " }} </span>
             <span class="date">{{ item.date }}</span>
           </div>
+          <div v-if="item.origin" class="date">{{ item.origin }}</div>
           <!-- <span>{{ index }}</span> -->
         </div>
         <br />
@@ -61,6 +68,8 @@
 </template>
 
 <script>
+import DisplayParams from "/src/components/DisplayParams.vue";
+
 export default {
   name: "DisplayProblems",
   props: {
@@ -70,6 +79,11 @@ export default {
     Heading: String,
     isLead: Number,
     method: { type: Function },
+    Procedure: Array,
+    SearchParam: Array,
+  },
+  components: {
+    DisplayParams,
   },
   data: function () {
     return {
@@ -95,9 +109,13 @@ export default {
 
     postit(item, way) {
       console.log(item, "test123");
-      this.$emit("add", item, way);
+
+      let origin = item.link.replace("https://www.", "").split("/")[0];
+
+      console.log(origin, item.link);
+      this.$emit("add", item, way, origin);
     },
-    async deleteComment(item, way) {
+    deleteComment(item, way) {
       this.$emit("delete", item, way);
     },
     toggle(event) {
@@ -132,6 +150,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.itemcount {
+  display: flex;
+  margin-left: 1%;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+}
+
 .ButtonFlex {
   display: flex;
   justify-content: space-between;

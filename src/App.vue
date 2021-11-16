@@ -58,8 +58,11 @@
         v-bind:Data="this.Data[counter].interestingcomments"
         v-bind:SaveButton="true"
         v-bind:IsDelete="false"
+        v-bind:Procedure="this.Data[counter].Procedure"
+        v-bind:SearchParam="this.Data[counter].SearchParam"
         @add="postComment"
-      />
+      >
+      </DisplayProblems>
     </div>
 
     <DisplayProblems
@@ -121,8 +124,8 @@ export default {
     }
   },
   methods: {
-    async postComment(item, way) {
-      console.log("realtest", item, way);
+    async postComment(item, way, origin) {
+      console.log("realtest", item, way, origin);
       await axios.post(this.url[way].url, {
         autor: item.autor,
         selftext: item.selftext,
@@ -130,6 +133,7 @@ export default {
         date: item.date,
         content: item.content,
         link: item.link,
+        origin: origin,
       });
       const res = await axios.get(this.url[way].url);
       this.interestingComments[way] = res.data;
@@ -162,7 +166,7 @@ export default {
   display: flex;
 }
 .list-item {
-  margin: 1%;
+  margin-left: 1%;
   margin-right: 30px;
   cursor: pointer;
 }
@@ -183,7 +187,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 290px;
+  margin-top: 240px;
 }
 body {
   margin-left: 0px !important;

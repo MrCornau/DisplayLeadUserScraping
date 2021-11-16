@@ -1061,5 +1061,24 @@
       "link": "https://www.reddit.com/r/photography/comments/d3s04u/ikea_photographers_started_an_instagram_account/"
     }
   ],
-  "name": "Redd_Comments_SM"
+  "name": "Redd_Comments_SM",
+  "SearchParam": [
+    ["I", "we", "us", "me", "our"],
+    [
+      "invent",
+      "made-up",
+      "create",
+      "develop",
+      "improve",
+      "engineer",
+      "develope",
+      "design",
+      "prototype"
+    ]
+  ],
+  "Procedure": [
+    { "content": "PRON", "display": "selector" },
+    { "content": "directly followed by", "display": "description" },
+    { "content": "VERBV", "display": "selector" }
+  ]
 }
