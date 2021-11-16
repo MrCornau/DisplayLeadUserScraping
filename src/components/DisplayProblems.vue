@@ -14,7 +14,9 @@
             ><span class="autor">{{ item.autor + " " }} </span>
             <span class="date">{{ item.date }}</span>
           </div>
-          <div v-if="item.origin" class="date">{{ item.origin }}</div>
+          <div v-if="item.origin" class="date">
+            {{ item.origin }}/{{ item.filename }}
+          </div>
           <!-- <span>{{ index }}</span> -->
         </div>
         <br />
@@ -81,6 +83,7 @@ export default {
     method: { type: Function },
     Procedure: Array,
     SearchParam: Array,
+    FileName: String,
   },
   components: {
     DisplayParams,
@@ -113,7 +116,7 @@ export default {
       let origin = item.link.replace("https://www.", "").split("/")[0];
 
       console.log(origin, item.link);
-      this.$emit("add", item, way, origin);
+      this.$emit("add", item, way, origin, this.FileName);
     },
     deleteComment(item, way) {
       this.$emit("delete", item, way);

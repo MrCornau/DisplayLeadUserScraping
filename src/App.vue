@@ -60,6 +60,7 @@
         v-bind:IsDelete="false"
         v-bind:Procedure="this.Data[counter].Procedure"
         v-bind:SearchParam="this.Data[counter].SearchParam"
+        v-bind:FileName="this.Data[counter].name"
         @add="postComment"
       >
       </DisplayProblems>
@@ -124,7 +125,7 @@ export default {
     }
   },
   methods: {
-    async postComment(item, way, origin) {
+    async postComment(item, way, origin, filename) {
       console.log("realtest", item, way, origin);
       await axios.post(this.url[way].url, {
         autor: item.autor,
@@ -134,6 +135,7 @@ export default {
         content: item.content,
         link: item.link,
         origin: origin,
+        filename: filename,
       });
       const res = await axios.get(this.url[way].url);
       this.interestingComments[way] = res.data;
@@ -164,6 +166,8 @@ export default {
 
 .switch {
   display: flex;
+  overflow: scroll;
+  white-space: nowrap;
 }
 .list-item {
   margin-left: 1%;
