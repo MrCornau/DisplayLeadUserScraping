@@ -938,5 +938,29 @@
       "content": "#3! the raw files are very clear and sharp (much better than the jpgs). the camera iso setting is at base iso (ever!) even if i need a higher sensitivity in fact! so my shots are often underexposed! when -----> -----> i !!!  develope !!!  the f-----> i !!! les -----> i !!!  push them to the -----> i !!! so need. the reason for this procedure is that a modern raw editor makes a much better job than the 10 years old camera software. i use photoshop /capure one. lambda. Edited April 26, 2016 by lambda",
       "link": "https://www.l-camera-forum.com/topic/259742-the-ultimate-question-on-bw/?tab=findComment&comment=3033689"
     }
+  ],
+  "name": "leica",
+  "Procedure": [
+    { "content": "PRON", "display": "selector" },
+    { "content": "optional followed by", "display": "description" },
+    { "content": "PART", "display": "selector" },
+    { "content": "optional followed by", "display": "description" },
+    { "content": "AUX", "display": "selector" },
+    { "content": "directly followed by", "display": "description" },
+    { "content": "VERBV", "display": "selector" }
+  ],
+  "SearchParam": [
+    ["I", "we", "us", "me", "our"],
+    [
+      "invent",
+      "made-up",
+      "create",
+      "develop",
+      "improve",
+      "engineer",
+      "develope",
+      "design",
+      "prototype"
+    ]
   ]
 }
