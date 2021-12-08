@@ -15,12 +15,12 @@
             <span class="date">{{ item.date }}</span>
           </div>
           <div v-if="item.origin" class="date">
-            {{ item.origin }}/{{ item.filename }}
+            {{ item.origin }}/{{ item.suborigin }}
           </div>
           <!-- <span>{{ index }}</span> -->
         </div>
         <br />
-        <span v-html="SplitProblems(item.content)"></span>
+        <span v-html="SplitProblems(item.MarkedSent)"></span>
         <div class="ButtonFlex">
           <a
             v-if="item.link"

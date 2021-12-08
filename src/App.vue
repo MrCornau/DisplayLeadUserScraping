@@ -37,7 +37,21 @@
       <div v-if="pagecount == 1">
         <div class="switch">
           <div
-            v-for="(item, index) in this.Data"
+            v-for="(item, index) in this.Files"
+            :key="item.name"
+            class="list-item"
+          >
+            <a
+              v-on:click="counter3 = index"
+              v-bind:class="[{ listItemSelected: counter3 === index }]"
+            >
+              <h1>{{ item }}</h1>
+            </a>
+          </div>
+        </div>
+        <div class="switch">
+          <div
+            v-for="(item, index) in this.Data[counter3]"
             :key="item.name"
             class="list-item"
           >
@@ -45,7 +59,7 @@
               v-on:click="counter = index"
               v-bind:class="[{ listItemSelected: counter === index }]"
             >
-              <h1>{{ this.Data[index].name }}</h1>
+              <h1>{{ this.Data[counter3][index].name }}</h1>
             </a>
           </div>
         </div>
@@ -53,14 +67,16 @@
     </div>
     <div>
       <DisplayProblems
-        v-if="pagecount == 1 && this.Data[counter].interestingcomments"
+        v-if="
+          pagecount == 1 && this.Data[counter3][counter].interestingcomments
+        "
         v-bind:Heading="'Problem'"
-        v-bind:Data="this.Data[counter].interestingcomments"
+        v-bind:Data="this.Data[counter3][counter].interestingcomments"
         v-bind:SaveButton="true"
         v-bind:IsDelete="false"
-        v-bind:Procedure="this.Data[counter].Procedure"
-        v-bind:SearchParam="this.Data[counter].SearchParam"
-        v-bind:FileName="this.Data[counter].name"
+        v-bind:Procedure="this.Data[counter3][counter].Procedure"
+        v-bind:SearchParam="this.Data[counter3][counter].SearchParam"
+        v-bind:FileName="this.Data[counter3][counter].name"
         @add="postComment"
       >
       </DisplayProblems>
@@ -94,8 +110,10 @@ export default {
       pagecount: 0,
       counter: 0,
       counter2: 0,
+      counter3: 0,
       test: true,
       Data: [],
+      Files: [],
       json: null, // passing array data into Vue
       url: [
         {
@@ -111,9 +129,17 @@ export default {
   },
   async created() {
     const foobar = await this.getJson();
-    foobar.forEach(async (item) => {
-      let temp = await import("./json/" + item.replace("./", ""));
-      this.Data.push(temp);
+    const bafoo = await this.getFolder();
+    bafoo.forEach(async (item) => {
+      this.Files.push(item);
+    });
+
+    foobar[1].forEach(async (item, i) => {
+      this.Data[i] = [];
+      item.forEach(async (item) => {
+        let temp = await import("./json/" + item.replace("./", ""));
+        this.Data[i].push(temp);
+      });
     });
 
     try {
@@ -121,21 +147,25 @@ export default {
       const res2 = await axios.get(this.url[1].url);
       this.interestingComments = [res.data, res2.data];
     } catch (e) {
-      console.log(e);
+      console.log("here", e);
     }
   },
   methods: {
-    async postComment(item, way, origin, filename) {
-      console.log("realtest", item, way, origin);
+    async postComment(item, way) {
       await axios.post(this.url[way].url, {
         autor: item.autor,
-        selftext: item.selftext,
-        title: item.title,
         date: item.date,
         content: item.content,
         link: item.link,
-        origin: origin,
-        filename: filename,
+        origin: item.origin,
+        suborigin: item.suborigin,
+        selector: item.Selector,
+        selectorShort: item.selectorShort,
+        MarkedSent: item.MarkedSent,
+        sortedWord: item.sortedWord,
+        Identifyer: item.Identifyer,
+        identifyer: item.identifyer,
+        year: item.year,
       });
       const res = await axios.get(this.url[way].url);
       this.interestingComments[way] = res.data;
@@ -145,11 +175,32 @@ export default {
       const res = await axios.get(this.url[way].url);
       this.interestingComments[way] = res.data;
     },
+    getFolder() {
+      let req = require.context("@/json", true, /^\.\//);
+      let arr = req.keys();
+      let map2 = arr.map((x) => x.split("/")[1]);
+
+      // console.log([...new Set(map2)]);
+      return [...new Set(map2)];
+    },
     getJson() {
       const files = require.context("@/json", true, /^.*json$/);
       files.keys();
-      console.log(files.keys());
-      return files.keys();
+      let arr2 = files.keys();
+      let map3 = arr2.map((x) => x.split("/")[1]);
+      let newArr = [...new Set(map3)];
+      let retArr = [];
+      newArr.forEach(async (item, i) => {
+        retArr[i] = [];
+        arr2.forEach(async (item2) => {
+          if (item2.includes(item)) {
+            // console.log(item, item2);
+            retArr[i].push(item2);
+          }
+        });
+      });
+      // console.log(retArr);
+      return [files.keys(), retArr];
     },
   },
 };
@@ -202,3 +253,13 @@ ul {
   padding: 0;
 }
 </style>
+
+"autor": "ntoporcov", "date": "2019-01-18 06:21:37", "content": "I created a web
+app for photographers who use Google Drive to send photos to clients but wish
+they had a better looking page to send to clients.", "link":
+"https://www.reddit.com/r/Nikon/comments/ah7lvu/i_created_a_web_app_for_photographers_who_use/",
+"origin": "Reddit", "suborigin": "nikon", "result": true, "Selector": "i
+created", "selectorShort": "create", "MarkedSent": "-----> i !!! -----> created
+!!! a web app for photographers who use google drive to send photos to clients
+but wish they had a better looking page to send to clients.", "sortedWord":
+"None", "Identifyer": null, "identifyer": 1248, "year": "2019"
