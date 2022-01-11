@@ -166,6 +166,10 @@ export default {
         Identifyer: item.Identifyer,
         identifyer: item.identifyer,
         year: item.year,
+        tag: "",
+        rating: 3,
+        heading: "",
+        description: "",
       });
       const res = await axios.get(this.url[way].url);
       this.interestingComments[way] = res.data;
